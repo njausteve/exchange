@@ -27,6 +27,13 @@ defmodule Exchange do
     GenServer.call(pid, {:instruction, instruction})
   end
 
+  @spec order_book(exchange_pid, integer()) :: [OrderBook.Entry.t()]
+  def order_book(pid, depth) when is_number(depth) do
+    GenServer.call(pid, {:order_book, depth})
+  end
+
+  def order_book(_, _), do: {:error, :invalid_depth_value}
+
   @impl true
   def handle_call({:instruction, event}, _from, state) do
     with {:ok, event} <- Event.new(event),
@@ -35,6 +42,10 @@ defmodule Exchange do
     else
       {:error, reason} -> {:reply, {:error, reason}, state}
     end
+  end
+
+  def handle_call({:order_book, depth}, _from, state) do
+    {:reply, OrderBook.get_orders(state, depth), state}
   end
 
   defp process_event(state, %Event{instruction: instruction} = event) do

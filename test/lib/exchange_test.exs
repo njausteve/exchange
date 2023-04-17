@@ -99,4 +99,77 @@ defmodule ExchangeTest do
       assert :ok = Exchange.send_instruction(exchange, delete_event)
     end
   end
+
+  describe "order_book/2" do
+    setup do
+      exchange = start_link_supervised!(Exchange)
+
+      %{exchange: exchange}
+    end
+
+    test "return error if non integer is passed as depth", %{exchange: exchange} do
+      assert {:error, :invalid_depth_value} = Exchange.order_book(exchange, "1")
+    end
+
+    test "returns the order book given the depth", %{exchange: exchange} do
+      event_1 = %{
+        instruction: :new,
+        side: :bid,
+        price_level_index: 1,
+        price: 50.0,
+        quantity: 30
+      }
+
+      event_2 = %{
+        instruction: :new,
+        side: :bid,
+        price_level_index: 2,
+        price: 40.0,
+        quantity: 40
+      }
+
+      event_3 = %{
+        instruction: :new,
+        side: :ask,
+        price_level_index: 1,
+        price: 60.0,
+        quantity: 10
+      }
+
+      event_4 = %{
+        instruction: :new,
+        side: :ask,
+        price_level_index: 2,
+        price: 70.0,
+        quantity: 10
+      }
+
+      event_5 = %{
+        instruction: :update,
+        side: :ask,
+        price_level_index: 2,
+        price: 70.0,
+        quantity: 20
+      }
+
+      event_6 = %{
+        instruction: :update,
+        side: :bid,
+        price_level_index: 1,
+        price: 50.0,
+        quantity: 40
+      }
+
+      for event <- [event_1, event_2, event_3, event_4, event_5, event_6] do
+        assert :ok = Exchange.send_instruction(exchange, event)
+      end
+
+      expected_order_book = [
+        %{ask_price: 60.0, ask_quantity: 10, bid_price: 50.0, bid_quantity: 40},
+        %{ask_price: 70.0, ask_quantity: 20, bid_price: 40.0, bid_quantity: 40}
+      ]
+
+      assert ^expected_order_book = Exchange.order_book(exchange, 2)
+    end
+  end
 end
