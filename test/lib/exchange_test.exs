@@ -102,7 +102,7 @@ defmodule ExchangeTest do
 
   describe "order_book/2" do
     setup do
-      exchange = start_link_supervised!(Exchange, name: __MODULE__)
+      exchange = start_link_supervised!(Exchange)
 
       %{exchange: exchange}
     end
