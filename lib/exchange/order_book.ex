@@ -62,10 +62,6 @@ defmodule Exchange.OrderBook do
     merge(asks, bids, book_depth)
   end
 
-  defp get_bid_or_ask(order_book, side) do
-    Map.get(order_book, @orderlist_mapping[side])
-  end
-
   defp merge(asks, bids, book_depth) do
     {padded_asks, padded_bids} = pad_lists(asks, bids, book_depth)
 
