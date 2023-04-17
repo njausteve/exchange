@@ -7,5 +7,5 @@ defmodule Exchange.State do
           bids: %{}
         }
 
-  defstruct [:asks, :bids]
+  defstruct asks: %{}, bids: %{}
 end

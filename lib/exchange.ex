@@ -4,6 +4,7 @@ defmodule Exchange do
   """
 
   alias Exchange.Event
+  alias Exchange.OrderBook
   alias Exchange.State
 
   use GenServer
@@ -28,9 +29,19 @@ defmodule Exchange do
 
   @impl true
   def handle_call({:instruction, event}, _from, state) do
-    case Event.new(event) do
-      {:ok, event} -> {:reply, :ok, state}
+    with {:ok, event} <- Event.new(event),
+         {:ok, state} <- process_event(state, event) do
+      {:reply, :ok, state}
+    else
       {:error, reason} -> {:reply, {:error, reason}, state}
+    end
+  end
+
+  defp process_event(state, %Event{instruction: instruction} = event) do
+    case instruction do
+      :new -> OrderBook.add_event(state, event)
+      :update -> OrderBook.update_event(state, event)
+      :delete -> OrderBook.delete_event(state, event)
     end
   end
 end
