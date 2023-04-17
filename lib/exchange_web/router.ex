@@ -5,6 +5,7 @@ defmodule ExchangeWeb.Router do
 
   @default_depth 10
 
+  plug CORSPlug
   plug(:match)
 
   # Attach the Logger to log incoming requests
