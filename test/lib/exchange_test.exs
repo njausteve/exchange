@@ -1,7 +1,7 @@
 defmodule ExchangeTest do
   @moduledoc false
 
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   describe "start_link/0" do
     test "starts the exchange successfully" do
