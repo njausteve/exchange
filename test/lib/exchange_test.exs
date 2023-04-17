@@ -76,5 +76,27 @@ defmodule ExchangeTest do
 
       assert :ok = Exchange.send_instruction(exchange, update_event)
     end
+
+    test ":delete instruction updates order and returns :ok", %{exchange: exchange} do
+      event = %{
+        instruction: :new,
+        side: :bid,
+        price: 50.0,
+        price_level_index: 1,
+        quantity: 30
+      }
+
+      assert :ok = Exchange.send_instruction(exchange, event)
+
+      delete_event = %{
+        instruction: :delete,
+        side: :bid,
+        price: 50.0,
+        price_level_index: 1,
+        quantity: 30
+      }
+
+      assert :ok = Exchange.send_instruction(exchange, delete_event)
+    end
   end
 end

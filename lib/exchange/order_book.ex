@@ -18,6 +18,7 @@ defmodule Exchange.OrderBook do
     {:ok, %State{state | asks: Map.put(state.asks, price, event)}}
   end
 
+  @impl true
   def update_event(%State{} = state, %Event{side: side, price: price} = event) do
     order_side = @orderlist_mapping[side]
     order_side_map = Map.get(state, order_side)
@@ -29,5 +30,15 @@ defmodule Exchange.OrderBook do
     else
       {:error, :none_existing_order}
     end
+  end
+
+  @impl true
+  def delete_event(%State{} = state, %Event{side: side, price: price}) do
+    order_side = @orderlist_mapping[side]
+    order_side_map = Map.get(state, order_side)
+
+    updated_order = Map.delete(order_side_map, price)
+
+    {:ok, Map.put(state, order_side, updated_order)}
   end
 end
