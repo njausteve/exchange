@@ -170,6 +170,25 @@ defmodule ExchangeTest do
       ]
 
       assert ^expected_order_book = Exchange.order_book(exchange, 2)
+
+      event_7 = %{
+        instruction: :new,
+        side: :bid,
+        price_level_index: 1,
+        price: 230.0,
+        quantity: 19
+      }
+
+      assert :ok = Exchange.send_instruction(exchange, event_7)
+
+      expected_updated_order_book = [
+        %{ask_price: 60.0, ask_quantity: 10, bid_price: 230.0, bid_quantity: 19},
+        %{ask_price: 70.0, ask_quantity: 20, bid_price: 50.0, bid_quantity: 40},
+        %{ask_price: 0.0, ask_quantity: 0, bid_price: 40.0, bid_quantity: 40},
+        %{ask_price: 0.0, ask_quantity: 0, bid_price: 0.0, bid_quantity: 0}
+      ]
+
+      assert ^expected_updated_order_book = Exchange.order_book(exchange, 4)
     end
   end
 end

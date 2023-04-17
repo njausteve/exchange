@@ -72,9 +72,9 @@ defmodule Exchange.OrderBook do
     Enum.zip_with(padded_asks, padded_bids, fn ask, bid ->
       Map.from_struct(%Entry{
         ask_price: ask.price || 0.0,
-        ask_quantity: ask.quantity || 0.0,
+        ask_quantity: ask.quantity || 0,
         bid_price: bid.price || 0.0,
-        bid_quantity: bid.quantity || 0.0
+        bid_quantity: bid.quantity || 0
       })
     end)
   end
