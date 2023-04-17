@@ -10,6 +10,8 @@ defmodule Exchange.Application do
     children = [
       # Starts a worker by calling: Exchange.Worker.start_link(arg)
       # {Exchange.Worker, arg}
+      Exchange,
+      ExchangeWeb
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -1,7 +1,7 @@
 defmodule ExchangeTest do
   @moduledoc false
 
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   describe "start_link/0" do
     test "starts the exchange successfully" do
@@ -102,7 +102,7 @@ defmodule ExchangeTest do
 
   describe "order_book/2" do
     setup do
-      exchange = start_link_supervised!(Exchange)
+      exchange = start_link_supervised!(Exchange, name: __MODULE__)
 
       %{exchange: exchange}
     end
