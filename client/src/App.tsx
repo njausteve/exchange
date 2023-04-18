@@ -1,14 +1,16 @@
 import React from 'react';
-import 'antd/dist/reset.css';
-import './App.css';
+import OrderBook from './components/OrderBook';
+import Header from './components/Header';
 
-
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      Render app here
-    </div>
-  );
-}
-
-export default App;
+    <div>
+      <Header />
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <div className="relative flex items-center justify-center py-5 lg:justify-between">
+          <OrderBook />
+        </div >
+      </div>
+    </div >
+  )
+};
